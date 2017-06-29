@@ -49,6 +49,8 @@ namespace WebApplication
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            // обработка ошибок HTTP
+            app.UseStatusCodePagesWithReExecute("/errors/{0}.html");
 
             app.UseStaticFiles();
 
