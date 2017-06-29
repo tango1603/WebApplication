@@ -15,21 +15,43 @@ namespace WebApplication.Controllers
         {
             this.db = context;
         }
-        public async Task<IActionResult> Index(int? buildnum, string street, int page = 1,
+        public async Task<IActionResult> Index(int? buildnum, int? id, int? postid, 
+            string street, string city, string country, DateTime? datetime, int page = 1,
             SortState sortOrder = SortState.IdAsc)
         {
             int pageSize = 100;
 
             //фильтрация
-            IQueryable<Address> addresses = db.Addreses;  //users
+            IQueryable<Address> addresses = db.Addreses;
 
             if (buildnum != null && buildnum != 0)
             {
                 addresses = addresses.Where(p => p.BuildingNumber == buildnum);
             }
+
+            if (id != null && id != 0)
+            {
+                addresses = addresses.Where(p => p.Id == id);
+            }
+
+            if (postid != null && postid != 0)
+            {
+                addresses = addresses.Where(p => p.PostID == postid);
+            }
+
             if (!String.IsNullOrEmpty(street))
             {
                 addresses = addresses.Where(p => p.Stereet.Contains(street));
+            }
+
+            if (!String.IsNullOrEmpty(city))
+            {
+                addresses = addresses.Where(p => p.City.Contains(city));
+            }
+
+            if (!String.IsNullOrEmpty(country))
+            {
+                addresses = addresses.Where(p => p.Country.Contains(country));
             }
 
             // сортировка
@@ -71,8 +93,8 @@ namespace WebApplication.Controllers
                 case SortState.DateTimeDesc:
                     addresses = addresses.OrderByDescending(s => s.DateTime);
                     break;
-                case SortState.IdAsc:
-                    addresses = addresses.OrderBy(s => s.Id);
+                case SortState.IdDesc:
+                    addresses = addresses.OrderByDescending(s => s.Id);
                     break;
                 default:
                     addresses = addresses.OrderBy(s => s.Id);
@@ -86,10 +108,11 @@ namespace WebApplication.Controllers
             // формируем модель представления
             IndexViewModel viewModel = new IndexViewModel
             {
+                Addresses = items,
                 PageViewModel = new PageViewModel(count, page, pageSize),
-                SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(db.Addreses.ToList(), buildnum,  street),
-                Addresses = items
+                FilterViewModel = new FilterViewModel(db.Addreses.ToList(), 
+                                                buildnum, id, postid, street, city, country, datetime),
+                SortViewModel = new SortViewModel(sortOrder)
             };
             return View(viewModel);
         }

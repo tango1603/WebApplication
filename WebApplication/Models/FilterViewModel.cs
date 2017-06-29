@@ -8,7 +8,7 @@ namespace WebApplication.Models
 {
     public class FilterViewModel
     {
-        public FilterViewModel(List<Address> addreses, int? buildnum, string street)// int? id, int? postid, string city,  string country)
+        public FilterViewModel(List<Address> addreses, int? buildnum, int? id, int? postid, string street, string city , string country, DateTime? datetime)
         {
             // устанавливаем начальный элемент, который позволит выбрать всех
             addreses.Insert(0, new Address
@@ -24,15 +24,19 @@ namespace WebApplication.Models
             Addresses = new SelectList(addreses, "Id", "City", buildnum);
             SelectedBuildingNumber = buildnum;
             SelectedStereet = street;
+            SelectedCity = city;
+            SelectedId = id;
+            SelectedPostID = postid;
+            SelectedCountry = country;
+            SelectedDateTime = datetime;
         }
         public SelectList Addresses { get; private set; } // список адресов
         public int? SelectedId { get; private set; }   // выбранн Id
         public int? SelectedBuildingNumber { get; private set; }   // выбранн BuildingNumber
         public int? SelectedPostID { get; private set; }   // выбранн PostID
-        public DateTime SelectedDateTime { get; private set; }   // выбранн DateTime
+        public DateTime? SelectedDateTime { get; private set; }   // выбранн DateTime
         public string SelectedCountry { get; private set; }    // введенное Country
         public string SelectedCity { get; private set; }    // введенное City
         public string SelectedStereet { get; private set; }    // введенное Stereet
-
     }
 }

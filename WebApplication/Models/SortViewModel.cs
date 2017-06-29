@@ -15,17 +15,79 @@ namespace WebApplication.Models
         public SortState PostIDSort { get; private set; }   // значение для сортировки по компании
         public SortState DateTimeSort { get; private set; }   // значение для сортировки по компании
         public SortState Current { get; private set; }     // текущее значение сортировки
+        public bool Up { get; set; }  // Сортировка по возрастанию или убыванию
 
         public SortViewModel(SortState sortOrder)
         {
-            IdSort = sortOrder == SortState.IdAsc ? SortState.IdDesc : SortState.IdAsc;
-            CountrySort = sortOrder == SortState.CountryAsc ? SortState.CountryDesc : SortState.CountryAsc;
-            CitySort = sortOrder == SortState.CityAsc ? SortState.CityDesc : SortState.CityAsc;
-            StereetSort = sortOrder == SortState.StereetAsc ? SortState.StereetDesc : SortState.StereetAsc;
-            BuildingNumberSort = sortOrder == SortState.BuildingNumberAsc ? SortState.BuildingNumberDesc : SortState.BuildingNumberAsc;
-            PostIDSort = sortOrder == SortState.PostIDAsc ? SortState.PostIDDesc : SortState.PostIDAsc;
-            DateTimeSort = sortOrder == SortState.DateTimeAsc ? SortState.DateTimeDesc : SortState.DateTimeAsc;
-            Current = sortOrder;
+            // значения по умолчанию
+            IdSort = SortState.IdAsc;
+            CountrySort = SortState.CountryAsc;
+            CitySort = SortState.CityAsc;
+            StereetSort = SortState.StereetAsc;
+            BuildingNumberSort = SortState.BuildingNumberAsc;
+            PostIDSort = SortState.PostIDAsc;
+            DateTimeSort = SortState.DateTimeAsc;
+            Up = true;
+
+            if (sortOrder == SortState.IdDesc 
+                || sortOrder == SortState.CountryDesc 
+                || sortOrder == SortState.CityDesc
+                || sortOrder == SortState.StereetDesc 
+                || sortOrder == SortState.BuildingNumberDesc 
+                || sortOrder == SortState.PostIDDesc 
+                || sortOrder == SortState.DateTimeDesc)
+            {
+                Up = false;
+            }
+
+            switch (sortOrder)
+            {
+                case SortState.CountryAsc:
+                    Current = CountrySort = SortState.CountryDesc;
+                    break;
+                case SortState.CountryDesc:
+                    Current = CountrySort = SortState.CountryAsc;
+                    break;
+                case SortState.CityAsc:
+                    Current = CitySort = SortState.CityDesc;
+                    break;
+                case SortState.CityDesc:
+                    Current = CitySort = SortState.CityAsc;
+                    break;
+                case SortState.StereetAsc:
+                    Current = StereetSort = SortState.StereetDesc;
+                    break;
+                case SortState.StereetDesc:
+                    Current = StereetSort = SortState.StereetAsc;
+                    break;
+                case SortState.BuildingNumberAsc:
+                    Current = BuildingNumberSort = SortState.BuildingNumberDesc;
+                    break;
+                case SortState.BuildingNumberDesc:
+                    Current = BuildingNumberSort = SortState.BuildingNumberAsc;
+                    break;
+                case SortState.PostIDAsc:
+                    Current = PostIDSort = SortState.PostIDDesc;
+                    break;
+                case SortState.PostIDDesc:
+                    Current = PostIDSort = SortState.PostIDAsc;
+                    break;
+                case SortState.DateTimeAsc:
+                    Current = DateTimeSort = SortState.DateTimeDesc;
+                    break;
+                case SortState.DateTimeDesc:
+                    Current = DateTimeSort = SortState.DateTimeAsc;
+                    break;
+                case SortState.IdDesc:
+                    Current = IdSort = SortState.IdAsc;
+                    break;
+                case SortState.IdAsc:
+                    Current = IdSort = SortState.IdDesc;
+                    break;
+                default:
+                    Current = IdSort = SortState.IdAsc;
+                    break;
+            }
         }
     }
 }  

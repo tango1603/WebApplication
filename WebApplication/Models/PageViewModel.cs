@@ -31,7 +31,5 @@ namespace WebApplication.Models
                 return (PageNumber < TotalPages);
             }
         }
-
-
     }
 }

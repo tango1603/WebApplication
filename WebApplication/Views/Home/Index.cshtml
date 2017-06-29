@@ -1,67 +1,171 @@
 ﻿@using WebApplication.Models
 @model IndexViewModel
 
+@*подключаем все tag-хелперы*@
+@addTagHelper "*, WebApplication"
+
 @{
     ViewData["Title"] = "Home Page";
 }
 <h1>Список пользователей</h1>
-<form method="get">
-    <div class="form-inline">
-        <label class="control-label">Улица: </label>
-        @Html.TextBox("street", Model.FilterViewModel.SelectedStereet, htmlAttributes: new { @class = "form-control" })
-
-        <label class="control-label">Номер дома: </label>
-        @Html.TextBox("buildnum", Model.FilterViewModel.SelectedBuildingNumber, htmlAttributes: new { @class = "form-control" })
-
-        <input type="submit" value="Фильтр" class="btn btn-default" />
-    </div>
-</form>
 
 <table class="table">
     <tr>
         <th>
-            <a asp-action="Index"
-               asp-route-sortOrder="@(Model.SortViewModel.StereetSort)"
-               asp-route-name="@(Model.FilterViewModel.SelectedStereet)"
-               asp-route-company="@(Model.FilterViewModel.SelectedBuildingNumber)">Улица</a>
+            <sort-header action="Index" 
+                         up="@Model.SortViewModel.Up"
+                         current="@Model.SortViewModel.Current" 
+                         property="@Model.SortViewModel.IdSort">
+                Id
+            </sort-header>
+            
+            <form method="get">
+                <div class="form-inline">
+                    @Html.TextBox("id", Model.FilterViewModel.SelectedId, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </form>
+        </th>
+
+
+        <th>
+            <sort-header action="Index" 
+                         up="@Model.SortViewModel.Up"
+                         current="@Model.SortViewModel.Current"
+                         property="@Model.SortViewModel.CountrySort">
+                Страна
+            </sort-header>
+            
+            <form method="get">
+                <div class="form-inline">
+                    @Html.TextBox("country", Model.FilterViewModel.SelectedCountry, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </form>
+        </th>
+
+        <th>
+            <sort-header action="Index"
+                         up="@Model.SortViewModel.Up"
+                         current="@Model.SortViewModel.Current"
+                         property="@Model.SortViewModel.CitySort">
+                Город
+            </sort-header>
+            
+            <form method="get">
+                <div class="form-inline">
+                    @Html.TextBox("city", Model.FilterViewModel.SelectedCity, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </form>
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.BuildingNumberSort)"
-               asp-route-name="@(Model.FilterViewModel.SelectedStereet)"
-               asp-route-company="@(Model.FilterViewModel.SelectedBuildingNumber)">Номер дома</a>
+            <sort-header action="Index"
+                         up="@Model.SortViewModel.Up"
+                         current="@Model.SortViewModel.Current"
+                         property="@Model.SortViewModel.StereetSort">
+                Улица
+            </sort-header>
+            
+            <form method="get">
+                <div class="form-inline">
+                    @Html.TextBox("street", Model.FilterViewModel.SelectedStereet, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </form>
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.CitySort)"
-               asp-route-name="@(Model.FilterViewModel.SelectedStereet)"
-               asp-route-company="@(Model.FilterViewModel.SelectedBuildingNumber)">Город</a>
+            <sort-header action="Index"
+                         up="@Model.SortViewModel.Up"
+                         current="@Model.SortViewModel.Current"
+                         property="@Model.SortViewModel.BuildingNumberSort">
+                Номер дома
+            </sort-header>
+            
+            <form method="get">
+                <div class="form-inline">
+                    @Html.TextBox("buildnum", Model.FilterViewModel.SelectedBuildingNumber, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </form>
         </th>
+
+        <th>
+            <sort-header action="Index"
+                         up="@Model.SortViewModel.Up"
+                         current="@Model.SortViewModel.Current"
+                         property="@Model.SortViewModel.PostIDSort">
+                Индекс
+            </sort-header>
+           
+            <form method="get">
+                <div class="form-inline">
+                    @Html.TextBox("postid", Model.FilterViewModel.SelectedPostID, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </form>
+        </th>
+
+        <th>
+            <sort-header action="Index"
+                         up="@Model.SortViewModel.Up"
+                         current="@Model.SortViewModel.Current"
+                         property="@Model.SortViewModel.DateTimeSort">
+                Дата
+            </sort-header>
+            
+            <form method="get">
+                <div class="form-inline">
+                    @Html.TextBox("datetime", Model.FilterViewModel.SelectedDateTime, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </form>
+        </th>       
     </tr>
     @foreach (Address u in Model.Addresses)
     {
-        <tr><td>@u.Stereet</td><td>@u.BuildingNumber</td><td>@u.City</td></tr>
+    <tr>
+        <td>@u.Id</td>
+        <td>@u.Country</td>
+        <td>@u.City</td>
+        <td>@u.Stereet</td>
+        <td>@u.BuildingNumber</td>
+        <td>@u.PostID</td>
+        <td>@u.DateTime</td>       
+    </tr>
     }
 </table>
+
+
+<page-link page-model="Model.PageViewModel" 
+           page-action="Index"
+           asp-url-street="@(Model.FilterViewModel.SelectedStereet)"
+           asp-url-buildnum="@(Model.FilterViewModel.SelectedBuildingNumber)"
+           asp-url-id="@(Model.FilterViewModel.SelectedId)"
+           asp-url-postid="@(Model.FilterViewModel.SelectedPostID)"
+           asp-url-city="@(Model.FilterViewModel.SelectedCity)"
+           asp-url-datetime="@(Model.FilterViewModel.SelectedDateTime)"
+           asp-url-country="@(Model.FilterViewModel.SelectedCountry)"           
+           >
+</page-link>
+
+
 @if (Model.PageViewModel.HasPreviousPage)
 {
     <a asp-action="Index"
        asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-       asp-route-name="@(Model.FilterViewModel.SelectedStereet)"
-       asp-route-company="@(Model.FilterViewModel.SelectedBuildingNumber)"
-       asp-route-sortorder="@(Model.SortViewModel.Current)"
-       class="btn btn-default btn">
-        <i class="glyphicon glyphicon-chevron-left"></i>
-        Назад
-    </a>
+       asp-route-street="@(Model.FilterViewModel.SelectedStereet)"
+       asp-route-buildnum="@(Model.FilterViewModel.SelectedBuildingNumber)"
+       asp-route-id="@(Model.FilterViewModel.SelectedId)"
+       asp-route-postid="@(Model.FilterViewModel.SelectedPostID)"
+       asp-route-city="@(Model.FilterViewModel.SelectedCity)"
+       asp-route-datetime="@(Model.FilterViewModel.SelectedDateTime)"
+       asp-route-country="@(Model.FilterViewModel.SelectedCountry)"
+       class="btn btn-default btn"><i class="glyphicon glyphicon-chevron-left"></i> Назад </a>
 }
 @if (Model.PageViewModel.HasNextPage)
 {
     <a asp-action="Index"
        asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-       asp-route-name="@(Model.FilterViewModel.SelectedStereet)"
-       asp-route-company="@(Model.FilterViewModel.SelectedBuildingNumber)"
-       asp-route-sortorder="@(Model.SortViewModel.Current)"
-       class="btn btn-default btn">
-        Вперед
-        <i class="glyphicon glyphicon-chevron-right"></i>
-    </a>
-}
+       asp-route-street="@(Model.FilterViewModel.SelectedStereet)"
+       asp-route-buildnum="@(Model.FilterViewModel.SelectedBuildingNumber)"
+       asp-route-id="@(Model.FilterViewModel.SelectedId)"
+       asp-route-postid="@(Model.FilterViewModel.SelectedPostID)"
+       asp-route-city="@(Model.FilterViewModel.SelectedCity)"
+       asp-route-datetime="@(Model.FilterViewModel.SelectedDateTime)"
+       asp-route-country="@(Model.FilterViewModel.SelectedCountry)"
+       class="btn btn-default btn">Вперед<i class="glyphicon glyphicon-chevron-right"></i>
+    </a>}
